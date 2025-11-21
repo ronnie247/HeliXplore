@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write   # allow pushing back to repo
+
 jobs:
   paper:
     runs-on: ubuntu-latest
@@ -30,7 +33,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add paper.pdf
-          git commit -m "Update compiled PDF with bibliography"
-          git push
+          git add paper.pdf || true
+          git commit -m "Update compiled PDF" || true
+          git push origin HEAD:main
 
