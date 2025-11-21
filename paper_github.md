@@ -10,6 +10,8 @@
 1. Department of Chemistry, Virginia Tech, Blacksburg, VA 24061
 2. Macromolecules Innovation Institute, Virginia Tech, Blacksburg, VA 24061
 
+**Email:** <vwelborn@vt.edu>
+
 **Tags:** molecular modeling, scientific computing, helix deformation, Python
 
 ---
