@@ -4,7 +4,7 @@
 
 **Authors:**
 - Ronnie Mondal<sup>1,2</sup> ([ORCID: 0000-0003-4393-018X](https://orcid.org/0000-0003-4393-018X))
-- Valerie Vaissier Welborn<sup>1,2</sup> ([ORCID: 0000-0003-0834-4441](https://orcid.org/0000-0003-0834-4441))
+- Valerie Vaissier Welborn<sup>1,2,*</sup> ([ORCID: 0000-0003-0834-4441](https://orcid.org/0000-0003-0834-4441))
 
 **Affiliations:**
 1. Department of Chemistry, Virginia Tech, Blacksburg, VA 24061

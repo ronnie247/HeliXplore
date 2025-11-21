@@ -16,5 +16,9 @@ jobs:
       - name: Generate PDF
         uses: openjournals/openjournals-pdf-generator@v1
         with:
+<<<<<<< HEAD
           paper-path: paper.md 
 
+=======
+          paper-path: paper.md   # replace with your actual filename
+>>>>>>> origin/main
