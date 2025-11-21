@@ -100,7 +100,7 @@ $$
 \mathcal{R}^{m}(t) = \frac{\sigma^i_{\text{Rise}^{i,m}(t)}}{\langle |\text{Rise}^{i,m}(t)| \rangle_i} + \frac{\sigma^i_{\text{Radius}^{i,m}(t)}}{\langle |\text{Radius}^{i,m}(t)| \rangle_i} + \frac{\sigma^i_{\text{Twist}^{i,m}(t)}}{\langle |\text{Twist}^{i,m}(t)| \rangle_i}
 $$
 
-where $\sigma^i$ means the standard deviation is done over $i$.
+where $\sigma^i$ means the standard deviation is done over $i$. 
 
 For inter-helix metrics, angles and distances between each strand pair are calculated. 
 
