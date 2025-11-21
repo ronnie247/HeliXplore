@@ -1,0 +1,56 @@
+============================================================
+DEPENDENCY CHECK PASSED
+============================================================
+All required packages are available:
+  ✓ numpy (version: 2.2.6)
+  ✓ pandas (version: 2.3.1)
+  ✓ matplotlib (version: 3.10.3)
+  ✓ scipy (version: 1.16.0)
+============================================================
+
+============================================================
+HELP MESSAGE REQUESTED
+============================================================
+usage: HeliXplore.py [-h] [-f FILE] [-s STRANDS] [-l LENGTH] [--atom-name [ATOM_NAME ...]] [--atom-type [ATOM_TYPE ...]] [--no-plot] [-w WORKDIR] [-v] [--check-file] [filepath]
+
+Analyze molecular trajectories with various deformations
+
+positional arguments:
+  filepath              Path to trajectory file (can be absolute, relative, or just filename)
+
+options:
+  -h, --help            show this help message and exit
+  -f, --file FILE       Path to trajectory file (alternative to positional argument)
+  -s, --strands STRANDS
+                        Number of strands
+  -l, --length LENGTH   Strand length
+  --atom-name [ATOM_NAME ...]
+                        Atom name(s) to filter. For PDB files (columns 13-16), include spaces (e.g., " CA " " N " " C "). For ARC files, spaces are optional.
+  --atom-type [ATOM_TYPE ...]
+                        Atom type(s) to filter (e.g., 129 130 156). Only applies to ARC files. Sixth column in ARC file. Can specify multiple types. Takes priority over atom name.
+  --no-plot             Disable default plotting
+  -w, --workdir WORKDIR
+                        Working directory (default: directory containing the trajectory file)
+  -v, --verbose         Enable verbose output
+  --check-file          Check if trajectory file exists before running analysis
+
+    Examples:
+    python HeliXplore.py /path/to/trajectory.arc --strands 5
+    python HeliXplore.py data/trajectory.arc --strands 2 --length 15 --atom-type 50 51 52
+    python HeliXplore.py /path/to/trajectory.pdb --strands 3 --length 20 --atom-name " CA " " N " "C" --atom-type 401 402
+    
+    *** FOR PDB FILES: Atom names must include proper spacing (4 characters).
+    If not provided, HeliXplore.py will autocorrect. Note that autocorrect may not always be accurate.
+    python HeliXplore.py trajectory.pdb --strands 2 --length 15 --atom-name " CA " " N  " " C  "
+
+    *** NOTE: If the length of strand of the multi-helix size is not provided, HeliXplore.py will autocalculate. 
+    Make sure your inputs are properly taken into account. Make sure to input the number of strands.
+    False validations can occur if the inputs are wrong but the product matches the helix units.
+    HeliXplore.py assumes all strands have the same number of units.
+
+    *** RUNNING EXAMPLES: To replicate the examples provided on GitHub, run:
+    python HeliXplore.py singlehelix.arc --strands 1 --atom-type 401 402
+    python HeliXplore.py doublehelix.arc --strands 2 --atom-name "CA" "N"
+    python HeliXplore.py triplehelix.arc --strands 3 --length 15
+        
+

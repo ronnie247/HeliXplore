@@ -1,0 +1,27 @@
+cff-version: 1.0.0
+message: "If you use HeliXplore in your research, please cite the following paper."
+title: "HeliXplore: A Python package for analyzing multi-strand helix deformations"
+authors:
+  - given-names: Ronnie
+    family-names: Mondal
+    orcid: "https://orcid.org/0000-0003-4393-018X"
+    affiliation: "Department of Chemistry, Virginia Tech, Blacksburg, VA 24061; Macromolecules Innovation Institute, Virginia Tech, Blacksburg, VA 24061"
+  - given-names: Valerie
+    family-names: Vaissier Welborn
+    orcid: "https://orcid.org/0000-0003-0834-4441"
+    affiliation: "Department of Chemistry, Virginia Tech, Blacksburg, VA 24061; Macromolecules Innovation Institute, Virginia Tech, Blacksburg, VA 24061"
+date-released: 2025-10-24
+doi: "10.21105/joss.XXXXX"  # Placeholder
+version: "1.0.0"
+license: "BSD-3-Clause"
+repository-code: "https://github.com/ronnie247/HeliXplore"
+preferred-citation:
+  type: article
+  title: "HeliXplore: A Python package for analyzing multi-strand helix deformations"
+  authors:
+    - given-names: Ronnie
+      family-names: Mondal
+    - given-names: Valerie
+      family-names: Vaissier Welborn
+  journal: "Journal of Open Source Software"
+  year: 2025
