@@ -1,24 +1,42 @@
-name: Build PDF
+name: Build and Commit PDF
 
 on:
   push:
+    paths:
+      - paper.md
+      - references.bib   # trigger if bibliography changes too
     branches: [ main ]
   pull_request:
+    paths:
+      - paper.md
+      - references.bib
     branches: [ main ]
 
 jobs:
-  build:
+  paper:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate PDF
-        uses: openjournals/openjournals-pdf-generator@v1
+      - name: Build draft PDF
+        uses: openjournals/openjournals-draft-action@master
         with:
-<<<<<<< HEAD
-          paper-path: paper.md 
+          journal: joss              # or jose
+          paper-path: paper.md       # your Markdown file
+          bib-path: references.bib   # your BibTeX file
 
-=======
-          paper-path: paper.md   # replace with your actual filename
->>>>>>> origin/main
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: paper
+          path: paper.pdf
+
+      - name: Commit PDF back to repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add paper.pdf
+          git commit -m "Update compiled PDF with bibliography"
+          git push
+
