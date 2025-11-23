@@ -39,9 +39,9 @@ Valerie Vaissier Welborn<sup> [1,2,*] </sup>     [ORCID: 0000-0003-0834-4441]
 
 Multi-stranded helices are a recurring structural motif in biomolecular systems, most prominently found in DNA and collagen [@watson1953molecular; @ramachandran1954structure]. They also appear in synthetic polymers and macromolecules [@yashima2009helical]. Multi-stranded helices can undergo local and global deformations that directly impact their function. Helix properties depend on strand length, strand composition, mutations and change in the environment, which can be modeled using classical Molecular Dynamics (MD). However, MD lacks a tool to systematically quantify multi-strand helix deformation across systems and conditions. In the past, people have used polysaccharide atom distances [@khatami2021using], collagen cross-sectional triangles [@ravikumar2008region], pitch, or principal axis measures [@zhang2006direct; @koneru2019quantitative]. Although adequate for the system under investigation, these metrics are not generally useful and miss key local or collective distortions. Without local or inter-strand descriptors, comparisons across systems remain largely qualitative. 
 
-We present `HeliXplore`, an open-source Python package for the systematic and quantitative analysis of multi-strand helix deformation. Inspired by collagen but generalizable to any helical bundle, `HeliXplore` measures how helices deviate from their ideal geometry using backbone markers. `HeliXplore` runs calculations in three sections: Section 1 for intra-strand deformations in rise, radius and twist per atom or group of atoms and per time frame; Section 2 for axial shifts, inter-strand deformations, local deformations and helical regularity; and Section 3 for triple-helix deformations, using the size and shape of the cross-sectional triangle. 
+We present `HeliXplore`, an open-source Python package for the systematic and quantitative analysis of multi-strand helix deformation. Inspired by collagen but generalizable to any helical bundle, `HeliXplore` measures how helices deviate from their ideal geometry using backbone markers. `HeliXplore` runs calculations in three sections: Section 1 for intra-strand deformations in rise, radius and twist per atom or group of atoms and per time frame; Section 2 for axial shifts, inter-strand deformations, local deformations and helical regularity; and Section 3 for triple-helix deformations, using the area and shape of the cross-sectional triangle. 
 
-In practice, one only needs `HeliXplore.py`, the MD trajectory file (in TINKER `.arc` format or the standard RCSB `.pdb` format) and the number of strands to be able to run the code. The number of units in each strand is an optional input. Users can also input the atom names or atom types (for TINKER `.arc` format) to select backbone markers. `read_tinker_arc()` and `read_traj_pdb()` functions can be replaced to cater to other trajectory file formats. `HeliXplore` checks for the four required Python dependencies (`numpy`, `scipy`, `pandas` and `matplotlib`) before running the main code, and no other installations are required. For a detailed description of the inputs and examples, see the `README` file on GitHub. A shorter description is provided with `python HeliXplore.py --help`.
+In practice, one only needs `HeliXplore.py`, the MD trajectory file (in [tinker]{.smallcaps} `.arc` format or the standard [rcsb]{.smallcaps} `.pdb` format) and the number of strands to be able to run the code. The number of units in each strand is an optional input. Users can also input the atom names or atom types (for [tinker]{.smallcaps} `.arc` format) to select backbone markers. `read_tinker_arc()` and `read_traj_pdb()` functions can be replaced to cater to other trajectory file formats. `HeliXplore` checks for the four required Python dependencies (`numpy`, `scipy`, `pandas` and `matplotlib`) before running the main code, and no other installations are required. For a detailed description of the inputs and examples, see the `README` file on GitHub. A shorter description is provided with `python HeliXplore.py --help`.
 
 ## Statement of Need
 
@@ -147,21 +147,21 @@ $$
 
 For triple helices, one atom on each strand is taken to form a triangular cross-section at that unit. 
 
-__Deviations in area__ ($\text{Area}^i(t)$) are calculated from the area of the triangle as 
+__Deviations in area__ are calculated from the area of the triangle as 
 $$
-\text{Area}^i(t) = \left(\frac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\| - \text{Area}^i(0)\right) / \text{Area}^i (0) 
+\delta^{i}_{\text{Area}}(t) = \left(\frac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\| - \text{Area}^i(0)\right) / \text{Area}^i (0) 
 $$ 
 
-__Deviations in shape__ ($\text{Shape}^i(t)$) are calculated from the normalized isoperimetric ratio (IP) as 
+__Deviations in shape__ are calculated from the normalized isoperimetric ratio (IP) as 
 $$
-\text{Shape}^i(t) = \left( \frac{4\pi \text{Area}^i(t)}{P^i(t)^2} - \text{IP}^i(0) \right) / \text{IP}^i(0)
+\delta^{i}_{\text{Shape}}(t) = \left( \frac{4\pi \text{Area}^i(t)}{P^i(t)^2} - \text{IP}^i(0) \right) / \text{IP}^i(0)
 $$ 
 where $P^i(t)$ is the corresponding perimeter.
 
 __Inter-strand deviations__ ($\zeta^{i}(t)$) can then be calculated for a triple helix from the output files as
 
 $$
-\zeta^{i}(t) = w_{\text{Area}} * \langle \text{Area}^{i}(t) \rangle + w_{\text{Shape}} * \langle \text{Shape}^{i}(t) \rangle
+\zeta^{i}(t) = w_{\text{Area}} * \langle \delta^{i}_{\text{Area}}(t) \rangle + w_{\text{Shape}} * \langle \delta^{i}_{\text{Shape}}(t) \rangle
 $$
 
 where $w_{\text{Area}}$ and $w_{\text{Shape}}$ are user-defined weights during post-processing and the average can be done over units or time or both.
