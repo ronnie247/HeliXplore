@@ -51,7 +51,7 @@ In practice, one only needs `HeliXplore.py`, the MD trajectory file (in [tinker]
 
 ### Section I:
 
-For a helix of length $N$, with $\mathbf{p}^{i,m}(t)$ coordinates of atom $i$ in strand $m$ over time $t$, the __helical axis vector__ $\mathbf{v}^m_1(t)$ is determined via principal component analysis:
+For a helix of length $N$, with $\mathbf{p}^{i,m}(t)$ the coordinates of atom $i$ in strand $m$ over time $t$, the __helical axis vector__ $\mathbf{v}^m_1(t)$ is determined via principal component analysis:
 
 $$ 
 \left[\frac{1}{N}\sum_{i=1}^{N}(\mathbf{p}^{i,m}(t) - \mathbf{c}^m(t))(\mathbf{p}^{i,m}(t) - \mathbf{c}^m(t))^T\right] \mathbf{v}^m_1(t) = \lambda^m_1(t) \mathbf{v}^m_1(t)
@@ -65,7 +65,7 @@ $$
 
 and $\lambda^m_1$ indicates the principal eigenvalue. The unit vector of $\mathbf{v}^m_1(t)$ is hereafter referred to as $\hat{\mathbf{v}}^m_1(t)$.
 
-For intra-helix metrics, two consecutive units of a strand are chosen for rise and three units for the radius and twist. __Deviations in rise__ for unit $i$ at strand $m$ are calculated as: 
+For intra-helix metrics, two consecutive atoms of a strand are chosen for rise and three atoms for the radius and twist. __Deviations in rise__ for unit $i$ at strand $m$ are calculated as: 
 
 $$
 \delta^{i,m}_{\text{Rise}}(t) = ((\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t) - \text{Rise}^{i,m}(0)) \hspace{2pt} / \hspace{2pt} \text{Rise}^{i,m}(0)
@@ -83,7 +83,7 @@ $$
 \dfrac{\|\mathbf{p}^{i,m}(t) - \mathbf{p}^{i-1,m}(t)\|  \|\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i-1,m}(t)\| \|\mathbf{p}^{i,m}(t) - \mathbf{p}^{i+1,m}(t)\|}{4 \times \frac{1}{2}\|(\mathbf{p}^{i,m}(t) - \mathbf{p}^{i-1,m}(t)) \times (\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i-1,m}(t))\|}
 $$
 
-__Deviations in twist__ for consecutive set of three atoms on strand $m$ are calculated as the angle between the normals of the planes defined by units $(i-1, i, i+1)$ ($\mathbf{n}^{i,m}_a(t)$) and $(i, i+1, i+2)$ ($\mathbf{n}^{i,m}_b(t)$) as:
+__Deviations in twist__ for consecutive set of three atoms on strand $m$ are calculated as the angle between the normals of the planes defined by atoms $(i-1, i, i+1)$ ($\mathbf{n}^{i,m}_a(t)$) and $(i, i+1, i+2)$ ($\mathbf{n}^{i,m}_b(t)$) as:
 
 $$
 \delta^{i,m}_{\text{Twist}}(t) = \left(\arccos\left(\frac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right) - \text{Twist}^{i,m}(0) \right) \hspace{2pt} / \hspace{2pt} \text{Twist}^{i,m}(0)
@@ -95,7 +95,7 @@ $$
 \langle \kappa^{i,m}(t) \rangle = w_{\text{Rise}} * \langle \delta^{i,m}_{\text{Rise}}(t) \rangle + w_{\text{Radius}} * \langle \delta^{i,m}_{\text{Radius}}(t) \rangle + w_{\text{Twist}} * \langle \delta^{i,m}_{\text{Twist}}(t) \rangle
 $$
 
-where $w_{\text{Rise}}$, $w_{\text{Radius}}$ and $w_{\text{Twist}}$ are user-defined weights during post-processing and the average can be taken over units, strands, time or a combination of the three.
+where $w_{\text{Rise}}$, $w_{\text{Radius}}$ and $w_{\text{Twist}}$ are user-defined weights during post-processing and the average can be taken over atoms, strands, time or a combination of the three.
 
 ### Section II:
 
@@ -164,7 +164,7 @@ $$
 \zeta^{i}(t) = w_{\text{Area}} * \langle \delta^{i}_{\text{Area}}(t) \rangle + w_{\text{Shape}} * \langle \delta^{i}_{\text{Shape}}(t) \rangle
 $$
 
-where $w_{\text{Area}}$ and $w_{\text{Shape}}$ are user-defined weights during post-processing and the average can be done over units or time or both.
+where $w_{\text{Area}}$ and $w_{\text{Shape}}$ are user-defined weights during post-processing and the average can be done over atoms or time or both.
 
 The first frame is taken as the reference. The reference can be changed by appending a new reference frame to the beginning of the input MD trajectory. All mathematical details are also outlined as comments in the code.
 
