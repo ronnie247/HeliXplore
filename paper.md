@@ -9,7 +9,7 @@ authors:
   - name: Ronnie Mondal
     orcid: 0000-0003-4393-018X
     affiliation: [1, 2]
-  - name: Valerie Vaissier Welborn^[Corresponding author email vwelborn@vt.edu]
+  - name: Valerie Vaissier Welborn^[Corresponding author]
     orcid: 0000-0003-0834-4441
     affiliation: [1, 2]
     email: vwelborn@vt.edu
@@ -26,7 +26,7 @@ format:
 date: 2025-11-24
 bibliography: references.bib
 ---
-
+Corresponding author email: <vwelborn@.vt.edu>
 
 
 # Summary
