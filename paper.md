@@ -26,7 +26,7 @@ format:
 date: 2025-11-24
 bibliography: references.bib
 ---
-Corresponding author email: <vwelborn@.vt.edu>
+Corresponding author email: [vwelborn@vt.edu](mailto:vwelborn@vt.edu)
 
 
 # Summary
@@ -62,7 +62,7 @@ and $\lambda^m_1$ indicates the principal eigenvalue. The unit vector of $\mathb
 __Deviations in rise__ for unit $i$ at strand $m$ are calculated as: 
 
 $$
-\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\text{Rise}^{i,m}(t)}  - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
+\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\normalsize \text{Rise}^{i,m}(t)}  - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
 $$
 
 __Deviations in radius__ are calculated using the circumradius $R^{i,m}$ as:
@@ -81,7 +81,7 @@ $$
 __Deviations in twist__ for atom $i$ on strand $m$ at time $t$ are calculated as the angle between the normals of the planes defined by consecutive atoms $(i-1, i, i+1)$ ($\mathbf{n}^{i,m}_a(t)$) and $(i, i+1, i+2)$ ($\mathbf{n}^{i,m}_b(t)$) as:
 
 $$
-\delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\dfrac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
+\delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\dfrac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\normalsize \text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
 $$
 
 __Windowed deviations__ are calculated after superposition using a sliding window. A window of 5 atoms centered around atom $i$ (atoms $i-2$ to $i+2$) is defined and then aligned to the reference window using the Kabsch algorithm [@kabsch1976solution] (in [numpy.linalg]{.smallcaps}). The windowed deviation of atom $i$ after alignment is then calculated as:
@@ -121,19 +121,19 @@ $$
 __Deviations in axis angles__ are calculated between the unit vectors of the principal axes of the two strands $m$ and $n$ as:
 
 $$
-\delta_{\theta}^{mn}(t) = \dfrac{\overbrace{|\arccos(\hat{\mathbf{v}}_1^m(t) \cdot \hat{\mathbf{v}}_1^n(t))}^{\theta^{mn}(t)} - \theta^{mn}(0)|}{\theta^{mn}(0)}.
+\delta_{\theta}^{mn}(t) = \dfrac{\overbrace{|\arccos(\hat{\mathbf{v}}_1^m(t) \cdot \hat{\mathbf{v}}_1^n(t))}^{\normalsize \theta^{mn}(t)} - \theta^{mn}(0)|}{\theta^{mn}(0)}.
 $$
 
 __Deviations in axis distances__ are calculated using the perpendicular distance between the axes of strands $m$ and $n$ as:
 
 $$
-\delta_d^{mn}(t) = \dfrac{ \overbrace{|(\mathbf{c}^m(t) - \mathbf{c}^n(t)) \cdot (\hat{\mathbf{v}}_1^m(t) \times \hat{\mathbf{v}}_1^n(t))|}^{d^{mn}(t)} - d^{mn}(0)}{d^{mn}(0)}.
+\delta_d^{mn}(t) = \dfrac{ \overbrace{|(\mathbf{c}^m(t) - \mathbf{c}^n(t)) \cdot (\hat{\mathbf{v}}_1^m(t) \times \hat{\mathbf{v}}_1^n(t))|}^{\normalsize d^{mn}(t)} - d^{mn}(0)}{d^{mn}(0)}.
 $$
 
 __Deviations in averaged distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
 
 $$
-\delta_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
+\delta_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{\normalsize c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
 $$
 
 ### Section III:
@@ -143,13 +143,13 @@ For triple helices, one atom $i$ on each strand is taken to form a triangular cr
 __Deviations in area__ are calculated from the area of the triangle as: 
 
 $$
-\delta^{i}_{\text{Area}}(t) = \dfrac{\overbrace{\dfrac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\|}^{\text{Area}^i(t)} - \text{Area}^i(0)}{\text{Area}^i (0)}.
+\delta^{i}_{\text{Area}}(t) = \dfrac{\overbrace{\dfrac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\|}^{\normalsize \text{Area}^i(t)} - \text{Area}^i(0)}{\text{Area}^i (0)}.
 $$ 
 
 __Deviations in shape__ are calculated from the normalized isoperimetric ratio (IP) as:
 
 $$
-\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\dfrac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
+\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\dfrac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\normalsize \text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
 $$ 
 where $P^i(t)$ is the corresponding perimeter.
 
