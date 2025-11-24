@@ -9,7 +9,7 @@ authors:
   - name: Ronnie Mondal
     orcid: 0000-0003-4393-018X
     affiliation: [1, 2]
-  - name: Valerie Vaissier Welborn^[Corresponding author]
+  - name: Valerie Vaissier Welborn^[Corresponding author email vwelborn@vt.edu]
     orcid: 0000-0003-0834-4441
     affiliation: [1, 2]
     email: vwelborn@vt.edu
@@ -26,6 +26,7 @@ format:
 date: 2025-11-24
 bibliography: references.bib
 ---
+
 
 
 # Summary
@@ -86,7 +87,7 @@ $$
 __Windowed deviations__ are calculated after superposition using a sliding window. A window of 5 atoms centered around atom $i$ (atoms $i-2$ to $i+2$) is defined and then aligned to the reference window using the Kabsch algorithm [@kabsch1976solution] (in [numpy.linalg]{.smallcaps}). The windowed deviation of atom $i$ after alignment is then calculated as:
 
 $$
-d^{i,m}_{\text{windowed}}(t) = \left\|\left\{\mathbf{K} \left(\{\mathbf{p}^{j,m}(t)\}_{j=i-2}^{i+2}, \{\mathbf{p}^{j,m}(0)\}_{j=i-2}^{i+2} \right)\right\}_i - \mathbf{p}^{i,m}(0)\right\| ,
+d^{i,m}_{\text{windowed}}(t) = \left\| \left\lbrace \mathbf{K} \left(\{\mathbf{p}^{j,m}(t)\}_{j=i-2}^{i+2}, \{\mathbf{p}^{j,m}(0)\}_{j=i-2}^{i+2} \right) \right\rbrace_i - \mathbf{p}^{i,m}(0)\right\| ,
 $$
 
 where $\mathbf{K}$ is the Kabsch alignment operator.
