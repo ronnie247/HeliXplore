@@ -12,6 +12,7 @@ authors:
   - name: Valerie Vaissier Welborn^[Corresponding author]
     orcid: 0000-0003-0834-4441
     affiliation: [1, 2]
+    email: vwelborn@vt.edu
 affiliations:
   - index: 1
     name: Department of Chemistry, Virginia Tech, Blacksburg, VA 24061
@@ -45,13 +46,13 @@ In practice, one only needs `HeliXplore.py`, the MD trajectory file (in [tinker]
 For a helix of length $N$, with $\mathbf{p}^{i,m}(t)$ the coordinates of atom $i$ in strand $m$ at time $t$, the __helical axis vector__ $\mathbf{v}^m_1(t)$ is determined via principal component analysis:
 
 $$ 
-\left[\frac{1}{N}\sum_{i=1}^{N}(\mathbf{p}^{i,m}(t) - \mathbf{c}^m(t))(\mathbf{p}^{i,m}(t) - \mathbf{c}^m(t))^T\right] \mathbf{v}^m_1(t) = \lambda^m_1(t) \mathbf{v}^m_1(t),
+\left[\dfrac{1}{N}\sum_{i=1}^{N}(\mathbf{p}^{i,m}(t) - \mathbf{c}^m(t))(\mathbf{p}^{i,m}(t) - \mathbf{c}^m(t))^T\right] \mathbf{v}^m_1(t) = \lambda^m_1(t) \mathbf{v}^m_1(t),
 $$
 
 where $\mathbf{c}^m(t)$ is the average coordinates of strand $m$ at time $t$:
 
 $$
-\mathbf{c}^m(t) = \frac{1}{N} \sum_{i=1}^{N} \mathbf{p}^{i,m}(t),
+\mathbf{c}^m(t) = \dfrac{1}{N} \sum_{i=1}^{N} \mathbf{p}^{i,m}(t),
 $$
 
 and $\lambda^m_1$ indicates the principal eigenvalue. The unit vector of $\mathbf{v}^m_1(t)$ is hereafter referred to as $\hat{\mathbf{v}}^m_1(t)$.
@@ -72,13 +73,13 @@ where:
 
 $$
 \text{R}^{i,m}(t) =
-\dfrac{\|\mathbf{p}^{i,m}(t) - \mathbf{p}^{i-1,m}(t)\|  \|\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i-1,m}(t)\| \|\mathbf{p}^{i,m}(t) - \mathbf{p}^{i+1,m}(t)\|}{4 \times \frac{1}{2}\|(\mathbf{p}^{i,m}(t) - \mathbf{p}^{i-1,m}(t)) \times (\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i-1,m}(t))\|}.
+\dfrac{\|\mathbf{p}^{i,m}(t) - \mathbf{p}^{i-1,m}(t)\|  \|\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i-1,m}(t)\| \|\mathbf{p}^{i,m}(t) - \mathbf{p}^{i+1,m}(t)\|}{4 \times \dfrac{1}{2}\|(\mathbf{p}^{i,m}(t) - \mathbf{p}^{i-1,m}(t)) \times (\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i-1,m}(t))\|}.
 $$
 
 __Deviations in twist__ for atom $i$ on strand $m$ at time $t$ are calculated as the angle between the normals of the planes defined by consecutive atoms $(i-1, i, i+1)$ ($\mathbf{n}^{i,m}_a(t)$) and $(i, i+1, i+2)$ ($\mathbf{n}^{i,m}_b(t)$) as:
 
 $$
-\delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\frac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
+\delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\dfrac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
 $$
 
 __Windowed deviations__ are calculated after superposition using a sliding window. A window of 5 atoms centered around atom $i$ (atoms $i-2$ to $i+2$) is defined and then aligned to the reference window using the Kabsch algorithm [@kabsch1976solution] (in [numpy.linalg]{.smallcaps}). The windowed deviation of atom $i$ after alignment is then calculated as:
@@ -127,7 +128,7 @@ $$
 \delta_d^{mn}(t) = \dfrac{ \overbrace{|(\mathbf{c}^m(t) - \mathbf{c}^n(t)) \cdot (\hat{\mathbf{v}}_1^m(t) \times \hat{\mathbf{v}}_1^n(t))|}^{d^{mn}(t)} - d^{mn}(0)}{d^{mn}(0)}.
 $$
 
-__Deviations in center distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
+__Deviations in averaged distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
 
 $$
 \delta_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
@@ -140,13 +141,13 @@ For triple helices, one atom $i$ on each strand is taken to form a triangular cr
 __Deviations in area__ are calculated from the area of the triangle as: 
 
 $$
-\delta^{i}_{\text{Area}}(t) = \dfrac{\overbrace{\frac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\|}^{\text{Area}^i(t)} - \text{Area}^i(0)}{\text{Area}^i (0)}.
+\delta^{i}_{\text{Area}}(t) = \dfrac{\overbrace{\dfrac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\|}^{\text{Area}^i(t)} - \text{Area}^i(0)}{\text{Area}^i (0)}.
 $$ 
 
 __Deviations in shape__ are calculated from the normalized isoperimetric ratio (IP) as:
 
 $$
-\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\frac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
+\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\dfrac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
 $$ 
 where $P^i(t)$ is the corresponding perimeter.
 
