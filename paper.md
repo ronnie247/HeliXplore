@@ -62,7 +62,7 @@ and $\lambda^m_1$ indicates the principal eigenvalue. The unit vector of $\mathb
 __Deviations in rise__ for unit $i$ at strand $m$ are calculated as: 
 
 $$
-\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\textnormal{\text{Rise}^{i,m}(t)}}  - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
+\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\textnormal{$\text{Rise}^{i,m}(t)$}}  - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
 $$
 
 __Deviations in radius__ are calculated using the circumradius $R^{i,m}$ as:
