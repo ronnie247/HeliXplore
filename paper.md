@@ -87,22 +87,20 @@ $$
 __Windowed deviations__ are calculated after superposition using a window of 5 atoms centered around atom $i$ with the Kabsch algorithm [@kabsch1976solution] as:
 
 $$
-d^{i,m}_{\text{local}}(t) = \|\mathbf{q}^{i,m}(t) - \mathbf{p}^{i,m}(0)\|,
+d^{i,m}_{\text{windowed}}(t) = \|\mathbf{q}^{i,m}(t) - \mathbf{p}^{i,m}(0)\|,
 $$
 
-where $\mathbf{q}^{i,m}(t)$ are the aligned coordinates of atom $i$ obtained from the window $j$ with coordinates $\mathbf{p}^{j,m}(t)$ as:
+where $\mathbf{q}^{i,m}(t)$ are the aligned coordinates of atom $i$. $\mathbf{q}^{i,m}(t)$ is calculated from the coordinates of the atoms within the window $\mathbf{p}^{j,m}(t)$, where $j \in [i-2,i+2]$ as:
 
 $$
-\mathbf{q}^{j,m}(t) = \mathbf{R}^{j,m}(t) \left(\mathbf{p}^{j,m}(t) - \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(t)\right) + \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(0),
+\mathbf{q}^{j,m}(t) = \mathbf{R}^{j,m}(t) \left(\mathbf{p}^{j,m}(t) - \langle \mathbf{p}^{j,m}(t) \rangle_j\right) + \langle \mathbf{p}^{j,m}(0) \rangle_j,
 $$
 
-where the optimal rotation matrix $\mathbf{R}^{j,m}(t)$ is obtained by singular value decomposition of the cross-covariance matrix $\mathbf{H}^{j,m}(t)$:
+where the optimal rotation matrix $\mathbf{R}^{j,m}(t)$ is obtained by singular value decomposition (using [numpy.linalg.svd]{.smallcaps}) of the cross-covariance matrix $\mathbf{H}^{j,m}(t)$:
 
 $$
-\mathbf{H}^{j,m}(t) = \sum_{j} \left(\mathbf{p}^{j,m}(t) - \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(t)\right) \left(\mathbf{p}^{j,m}(0) - \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(0)\right)^T,
+\mathbf{H}^{j,m}(t) = \sum_{j} \left(\mathbf{p}^{j,m}(t) - \langle \mathbf{p}^{j,m}(t) \rangle_j \right) \left(\mathbf{p}^{j,m}(0) - \langle \mathbf{p}^{j,m}(0) \rangle_j \right)^T.
 $$
-
-such that $\mathbf{H}^{j,m}(t) = \mathbf{U}^{j,m}(t) \mathbf{S}^{j,m}(t) (\mathbf{V}^{j,m}(t))^T$ and $\mathbf{R}^{j,m}(t) = \mathbf{U}^{j,m}(t) (\mathbf{V}^{j,m}(t))^T$ with the constraint that $\det(\mathbf{R}^{j,m}(t)) = +1$ to ensure a proper rotation. If $\det(\mathbf{U}^{j,m}(t)(\mathbf{V}^{j,m}(t))^T) = -1$, the sign of the last column of $\mathbf{V}^{j,m}(t)$ is flipped to fulfil the constraint.
 
 __Helical regularity__ for a strand $m$ is calculated as: 
 
