@@ -36,7 +36,7 @@ In practice, one only needs `HeliXplore.py`, the MD trajectory file (in [tinker]
 
 ## Statement of Need
 
-`HeliXplore` provides the first open-source, Python-based implementation of a quantitative framework for analyzing poly-helix deformations. By resolving intra- and inter-strand deformations, `HeliXplore` enables atomic resolution of structural distortions that have previously eluded MD studies. More broadly, `HeliXplore` establishes a transferable methodology for analyzing helices, positioning it as a foundational tool for systematic comparisons across systems, conditions and force fields. Users of `HeliXplore` are free to modify the code and underlying mathematical formulations to adapt to their specific research needs.
+`HeliXplore` provides the first open-source, Python-based implementation of a quantitative framework for analyzing multi-helix deformations. By resolving intra- and inter-strand deformations, `HeliXplore` enables atomic resolution of structural distortions that have previously eluded MD studies. More broadly, `HeliXplore` establishes a transferable methodology for analyzing helices, positioning it as a foundational tool for systematic comparisons across systems, conditions and force fields. Users of `HeliXplore` are free to modify the code and underlying mathematical formulations to adapt to their specific research needs.
 
 # Mathematics 
 
@@ -59,7 +59,7 @@ and $\lambda^m_1$ indicates the principal eigenvalue. The unit vector of $\mathb
 __Deviations in rise__ for unit $i$ at strand $m$ are calculated as: 
 
 $$
-\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\text{Rise}^{i,m}(t)}  - \text{Rise}^{i,m}(0))}{\text{Rise}^{i,m}(0)}.
+\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\text{Rise}^{i,m}(t)}  - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
 $$
 
 __Deviations in radius__ are calculated using the circumradius $R^{i,m}$ as:
@@ -81,7 +81,7 @@ $$
 \delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\frac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
 $$
 
-__Windowed deviations__ are calculated after superposition using a sliding window. A window of 5 atoms centered around atom $i$ (atoms $i-2$ to $i+2$) is defined and then aligned to the reference window using the Kabsch algorithm [@kabsch1976solution] (in [numpy.linalg]{.smallcaps}). The windowed deviation is the scalar positional deviation of atom $i$ after alignment, calculated as
+__Windowed deviations__ are calculated after superposition using a sliding window. A window of 5 atoms centered around atom $i$ (atoms $i-2$ to $i+2$) is defined and then aligned to the reference window using the Kabsch algorithm [@kabsch1976solution] (in [numpy.linalg]{.smallcaps}). The windowed deviation of atom $i$ after alignment is then calculated as:
 
 $$
 d^{i,m}_{\text{windowed}}(t) = \left\|\left\{\mathbf{K} \left(\{\mathbf{p}^{j,m}(t)\}_{j=i-2}^{i+2}, \{\mathbf{p}^{j,m}(0)\}_{j=i-2}^{i+2} \right)\right\}_i - \mathbf{p}^{i,m}(0)\right\|,
@@ -130,7 +130,7 @@ $$
 __Deviations in center distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
 
 $$
-d_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
+\delta_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
 $$
 
 ### Section III:
