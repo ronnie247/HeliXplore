@@ -1895,9 +1895,9 @@ def calculate_interhelical_metrics(strands, ideal_strands):
         - 'ideal_axis_angles': list of float, ideal angles between helical axes in radians
         - 'axis_angle_deviations': list of float, relative deviations from ideal axis angles
         
-        - 'centroid_distances': list of float, distances between strand centroids for each pair
-        - 'ideal_centroid_distances': list of float, ideal distances between strand centroids  
-        - 'centroid_distance_deviations': list of float, relative deviations from ideal centroid distances
+        - 'center_distances': list of float, distances between strand centroids for each pair
+        - 'ideal_center_distances': list of float, ideal distances between strand centroids  
+        - 'center_distance_deviations': list of float, relative deviations from ideal centroid distances
         
         And optional metrics, recommended for post-processing instead.
         - 'interhelical_geometry_deviation': float, overall geometric deviation score (0-1 scale)
@@ -1911,8 +1911,8 @@ def calculate_interhelical_metrics(strands, ideal_strands):
     ideal_axis_distances = []
     axis_angles = []
     ideal_axis_angles = []
-    centroid_distances = []
-    ideal_centroid_distances = []
+    center_distances = []
+    ideal_center_distances = []
     
     # Process all pairs of strands
     for i in range(num_strands):
@@ -1946,7 +1946,7 @@ def calculate_interhelical_metrics(strands, ideal_strands):
             
             # Calculate centroid distance
             centroid_distance = np.linalg.norm(centroid_i - centroid_j)
-            centroid_distances.append(centroid_distance)
+            center_distances.append(centroid_distance)
             
             # Do the same for ideal strands
             ideal_axis_i = ideal_params[i]['axis']
@@ -1970,7 +1970,7 @@ def calculate_interhelical_metrics(strands, ideal_strands):
             ideal_axis_angles.append(ideal_angle)
             # Ideal centroid distance
             ideal_centroid_distance = np.linalg.norm(ideal_centroid_i - ideal_centroid_j)
-            ideal_centroid_distances.append(ideal_centroid_distance)
+            ideal_center_distances.append(ideal_centroid_distance)
     
     # Calculate deviation from ideal geometry
     axis_distance_deviations = [
@@ -1979,15 +1979,15 @@ def calculate_interhelical_metrics(strands, ideal_strands):
     axis_angle_deviations = [
         np.abs(angle - ideal) / ideal if ideal > 0 else angle
         for angle, ideal in zip(axis_angles, ideal_axis_angles)]
-    centroid_distance_deviations = [
+    center_distance_deviations = [
         np.abs(dist - ideal) / ideal if ideal > 0 else dist
-        for dist, ideal in zip(centroid_distances, ideal_centroid_distances)]
+        for dist, ideal in zip(center_distances, ideal_center_distances)]
     
     # Calculate overall interhelical geometry deviation - optional
     interhelical_geometry_deviation = (
         np.mean(axis_distance_deviations) + 
         np.mean(axis_angle_deviations) + 
-        np.mean(centroid_distance_deviations)) / 3.0
+        np.mean(center_distance_deviations)) / 3.0
     
     return {
         'axis_distances': axis_distances,
@@ -1996,9 +1996,9 @@ def calculate_interhelical_metrics(strands, ideal_strands):
         'axis_angles': axis_angles,
         'ideal_axis_angles': ideal_axis_angles,
         'axis_angle_deviations': axis_angle_deviations,
-        'centroid_distances': centroid_distances,
-        'ideal_centroid_distances': ideal_centroid_distances,
-        'centroid_distance_deviations': centroid_distance_deviations,
+        'center_distances': center_distances,
+        'ideal_center_distances': ideal_center_distances,
+        'center_distance_deviations': center_distance_deviations,
         'interhelical_geometry_deviation': interhelical_geometry_deviation}
 
 def calculate_frame_deformation_score(frame_result):
@@ -2154,7 +2154,7 @@ def print_results_as_table(results, output_file, output_file2, num_strands):
         interhelix_metrics = [
             'axis_distance_deviations',
             'axis_angle_deviations', 
-            'centroid_distance_deviations']
+            'center_distance_deviations']
         for metric in interhelix_metrics:
             for label in pair_labels:
                 columns2.append(f"{metric}_{label}")
@@ -2699,11 +2699,12 @@ def run_various_deformations(strand_length,coordinates,output_pwd,num_strands=3,
             # Step 3: Plot the way you feel like
             plot_deformation_from_file(f"{output_pwd}/Section1_multi_helix_deform_results_unit.dat",f"{output_pwd}/Section1_multi_helix_deform_results_plot.png", weights=weightages) 
             plot_time_deformation_from_file(filename=f"{output_pwd}/Section1_multi_helix_deform_results_time.dat",plot_file=f"{output_pwd}/Section1_multi_helix_deform_results_plot_over_time.png",ff=30,weights=weightages)
+        print("Calculated intra-helical metrics over strands.")
         print("-" * 100)
         print("-" * 100)
 
         print(f"Printouts for Section II for {num_strands:.0f} helices")
-        print("This calculates helical regularity, parameter by strand, axial shift, windowed deformations, interhelical metrics over strand pairs")
+        print("This calculates inter-helical metrics over strand pairs")
         print("All output files start with a prefix \" Section2_\"")
         print("-" * 100)
         # Step 1: Analyze deformation

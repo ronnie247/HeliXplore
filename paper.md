@@ -30,15 +30,13 @@ bibliography: references.bib
 
 Multi-stranded helices are a recurring structural motif in biomolecular systems, most prominently found in DNA and collagen [@watson1953molecular; @ramachandran1954structure]. They also appear in synthetic polymers and macromolecules [@yashima2009helical]. Helix properties depend on strand length, strand composition and the environment, which can be modeled using classical Molecular Dynamics (MD). However, multi-stranded helices can undergo local and global deformations that directly impact their function. MD lacks a tool to systematically quantify deformation across systems and conditions. In the past, people have used polysaccharide atom distances [@khatami2021using], collagen cross-sectional triangles [@ravikumar2008region], pitch, or principal axis measures [@zhang2006direct; @koneru2019quantitative]. Although adequate for the system under investigation, these metrics are not generalizable and miss key local or collective distortions. Without local or inter-strand descriptors, comparisons across systems remain largely qualitative. 
 
-We present `HeliXplore`, an open-source Python package for the systematic and quantitative analysis of multi-strand helix deformation. Originally inspired by collagen, `HeliXplore` is generalizable to any helical bundle, including single-stranded helices. `HeliXplore` measures how helices deviate from their ideal geometry using user-defined backbone atoms. `HeliXplore` runs calculations in three sections: 
-
-EDIT: Section 1 for intra-strand deformations (rise, radius, twist and windowed deviations) per atom, or group of atoms and per time frame and helical regularity per strand; Section 2 for inter-strand deformations (axial shifts, axis angle deviations, axis distance deviations and centroid distance deviations); and Section 3 for triple-helix deformations, using the area and shape of the cross-sectional triangle. 
+We present `HeliXplore`, an open-source Python package for the systematic and quantitative analysis of multi-strand helix deformation. Originally inspired by collagen, `HeliXplore` is generalizable to any helical bundle, including single-stranded helices. `HeliXplore` measures how helices deviate from their ideal geometry using user-defined backbone atoms. `HeliXplore` runs calculations in three sections: Section 1 for intra-strand deformations (rise, radius, twist and windowed deviations) per atom, or group of atoms and per time frame and helical regularity per strand; Section 2 for inter-strand deformations (axial shifts, axis angle deviations, axis distance deviations and centroid distance deviations); and Section 3 for triple-helix deformations, using the area and shape of the cross-sectional triangle. 
 
 In practice, one only needs `HeliXplore.py`, the MD trajectory file (in [tinker]{.smallcaps} `.arc` format or the standard [rcsb]{.smallcaps} `.pdb` format) and the number of strands to be able to run the code. Users can also input the atom names or atom types (for [tinker]{.smallcaps} `.arc` format) to mark the backbone. `read_tinker_arc()` and `read_traj_pdb()` functions can be replaced to cater to other trajectory file formats. `HeliXplore` checks for the four required Python dependencies (`numpy`, `scipy`, `pandas` and `matplotlib`) before running the main code. No other installations are required. For a detailed description of the inputs and examples, see the `README` file on GitHub. A shorter description is provided with `python HeliXplore.py --help`.
 
 ## Statement of Need
 
-`HeliXplore` provides the first open-source, Python-based implementation of a quantitative framework for analyzing poly-helix deformations. By resolving intra- and inter-helix deformations, `HeliXplore` enables atomic resolution of structural distortions that have previously eluded MD studies. More broadly, `HeliXplore` establishes a transferable methodology for analyzing helices, positioning it as a foundational tool for systematic comparisons across systems, conditions and force fields. Users of `HeliXplore` are free to modify the code and underlying mathematical formulations to adapt to their specific research needs.
+`HeliXplore` provides the first open-source, Python-based implementation of a quantitative framework for analyzing poly-helix deformations. By resolving intra- and inter-strand deformations, `HeliXplore` enables atomic resolution of structural distortions that have previously eluded MD studies. More broadly, `HeliXplore` establishes a transferable methodology for analyzing helices, positioning it as a foundational tool for systematic comparisons across systems, conditions and force fields. Users of `HeliXplore` are free to modify the code and underlying mathematical formulations to adapt to their specific research needs.
 
 # Mathematics 
 
@@ -129,7 +127,7 @@ $$
 \delta_d^{mn}(t) = \dfrac{ \overbrace{|(\mathbf{c}^m(t) - \mathbf{c}^n(t)) \cdot (\hat{\mathbf{v}}_1^m(t) \times \hat{\mathbf{v}}_1^n(t))|}^{d^{mn}(t)} - d^{mn}(0)}{d^{mn}(0)}.
 $$
 
-__Deviations in centroid distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
+__Deviations in center distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
 
 $$
 d_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
@@ -146,7 +144,7 @@ $$
 $$ 
 
 __Deviations in shape__ are calculated from the normalized isoperimetric ratio (IP) as:
- 
+
 $$
 \delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\frac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)}.
 $$ 
