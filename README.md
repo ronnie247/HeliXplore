@@ -141,7 +141,8 @@ Section1_multi_helix_deform_results_plot.png
 Section1_multi_helix_deform_results_time_per_strand.dat
 Section1_multi_helix_deform_results_time.dat
 Section1_multi_helix_deform_results_unit.dat
-Section2_multi_helix_deformation_table.dat
+Section1_multi_helix_deformation_table_intra.dat
+Section2_multi_helix_deformation_table_inter.dat
 ```
 
 For triple-helix systems, `HeliXplore` also runs Section 3, with additional output files as:

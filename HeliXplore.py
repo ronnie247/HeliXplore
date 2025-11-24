@@ -2204,7 +2204,7 @@ def print_results_as_table(results, output_file, output_file2, num_strands):
         df2.insert(0, 'frame', frame_indices)
         df2.to_csv(output_file2, index=False)
 
-    return df, df2
+    return df
 
 ####################################################################
 """
@@ -2716,7 +2716,7 @@ def run_various_deformations(strand_length,coordinates,output_pwd,num_strands=3,
         # print("Interhelical metrics are printed in the order:\n 1 - between strands 1 and 2 \n 2 - between strands 1 and 3 \n ... \n n-1 - between strands 1 and n \n n - between strands 2 and 3 \n ... \n n(n-1) - between strands n-1 and n")
         results = analyze_multi_helix_deformation(coordinates, num_strands=num_strands, strand_length=strand_length//3)
         # Step 2: Print to a file
-        df, df2 = print_results_as_table(results, output_file=f"{output_pwd}/Section1_multi_helix_deformation_table_intra.dat", output_file2=f"{output_pwd}/Section2_multi_helix_deformation_table_inter.dat", num_strands=num_strands)
+        df = print_results_as_table(results, output_file=f"{output_pwd}/Section1_multi_helix_deformation_table_intra.dat", output_file2=f"{output_pwd}/Section2_multi_helix_deformation_table_inter.dat", num_strands=num_strands)
         # Step 3 (Not Added Here): Plot using columns of df the way you like
         print("-" * 100)
         print("-" * 100)

@@ -1,4 +1,4 @@
-frame,strand1_shift,strand1_helical_regularity,strand1_local_deformation_mean,strand1_local_deformation_max
+frame,strand1_shift,strand1_helical_regularity,strand1_windowed_deformation_mean,strand1_windowed_deformation_max
 0,0.0,2.2882175122335466,3.5197590985627025e-15,1.3181297901759441e-14
 1,0.32654789129579354,2.456796727635331,0.2405225538825968,0.42001309821246285
 2,0.512067332169044,2.3173736730837784,0.21993544204373192,0.3425071685312043

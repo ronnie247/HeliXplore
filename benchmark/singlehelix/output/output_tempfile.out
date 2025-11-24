@@ -67,7 +67,7 @@ Trajectory contains:
 ============================================================
 CREATING OUTPUT DIRECTORY
 ============================================================
-Output directory: /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47
+Output directory: /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23
 Directory created successfully.
 
 ============================================================
@@ -78,21 +78,21 @@ Printouts for Section I for 1 helices
 This calculates INTRA-strand deformations for any multi-helix system
 All output files start with a prefix " Section1_"
 ----------------------------------------------------------------------------------------------------
-Residue-based deformation data saved to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_unit.dat
+Residue-based deformation data saved to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_unit.dat
 Note that the number of residues here is 30 as the last two are not printed.
-Deformation data saved to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_time.dat
-Per-strand deformation data saved to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_time_per_strand.dat
-Successfully read deformation data from /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_unit.dat
+Deformation data saved to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_time.dat
+Per-strand deformation data saved to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_time_per_strand.dat
+Successfully read deformation data from /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_unit.dat
 Data contains 30 tripeptides
-Residue-based deformation data ploted to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_plot.png
-Successfully read deformation data from /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_time.dat
+Residue-based deformation data ploted to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_plot.png
+Successfully read deformation data from /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_time.dat
 Data contains 1000 Frames
-Time-based deformation data plotted to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-21_11-13-47/Section1_multi_helix_deform_results_plot_over_time.png
-----------------------------------------------------------------------------------------------------
+Time-based deformation data plotted to /Users/ronniemondal/Desktop/Valerie/Collagen/deformation_api/HeliXplore_2025-11-24_15-45-23/Section1_multi_helix_deform_results_plot_over_time.png
+Calculated intra-helical metrics over strands.
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 Printouts for Section II for 1 helices
-This calculates helical regularity, parameter by strand, axial shift, local deformations, interhelical metrics over strand pairs
+This calculates inter-helical metrics over strand pairs
 All output files start with a prefix " Section2_"
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
