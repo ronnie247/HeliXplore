@@ -59,10 +59,10 @@ $$
 
 and $\lambda^m_1$ indicates the principal eigenvalue. The unit vector of $\mathbf{v}^m_1(t)$ is hereafter referred to as $\hat{\mathbf{v}}^m_1(t)$.
 
-__Deviations in rise__ for unit $i$ at strand $m$ are calculated as: 
+__Deviations in rise__ for atom $i$ at strand $m$ are calculated as: 
 
 $$
-\delta^{i,m}_{\text{Rise}}(t) = \dfrac{\overbrace{(\mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t)) \cdot \mathbf{v}^m_1(t)}^{\textnormal{$\text{Rise}^{i,m}(t)$}}  - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
+\delta^{i,m}_{\text{Rise}}(t) = \frac{\overbrace{\big( \mathbf{p}^{i+1,m}(t) - \mathbf{p}^{i,m}(t) \big) \cdot \mathbf{v}^m_1(t)}^{\displaystyle \text{Rise}^{i,m}(t)} - \text{Rise}^{i,m}(0)}{\text{Rise}^{i,m}(0)}.
 $$
 
 __Deviations in radius__ are calculated using the circumradius $R^{i,m}$ as:
@@ -81,16 +81,28 @@ $$
 __Deviations in twist__ for atom $i$ on strand $m$ at time $t$ are calculated as the angle between the normals of the planes defined by consecutive atoms $(i-1, i, i+1)$ ($\mathbf{n}^{i,m}_a(t)$) and $(i, i+1, i+2)$ ($\mathbf{n}^{i,m}_b(t)$) as:
 
 $$
-\delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\dfrac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\normalsize \text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
+\delta^{i,m}_{\text{Twist}}(t) = \dfrac{\overbrace{\arccos\left(\dfrac{\mathbf{n}^{i,m}_a(t) \cdot \mathbf{n}^{i,m}_b(t)}{\|\mathbf{n}^{i,m}_a(t)\|\|\mathbf{n}^{i,m}_b(t)\|}\right)}^{\displaystyle \text{Twist}^{i,m}(t)} - \text{Twist}^{i,m}(0)}{\text{Twist}^{i,m}(0)}.
 $$
 
-__Windowed deviations__ are calculated after superposition using a sliding window. A window of 5 atoms centered around atom $i$ (atoms $i-2$ to $i+2$) is defined and then aligned to the reference window using the Kabsch algorithm [@kabsch1976solution] (in [numpy.linalg]{.smallcaps}). The windowed deviation of atom $i$ after alignment is then calculated as:
+__Windowed deviations__ are calculated after superposition using a window of 5 atoms centered around atom $i$ with the Kabsch algorithm [@kabsch1976solution] as:
 
 $$
-d^{i,m}_{\text{windowed}}(t) = \left\| \left\lbrace \mathbf{K} \left(\{\mathbf{p}^{j,m}(t)\}_{j=i-2}^{i+2}, \{\mathbf{p}^{j,m}(0)\}_{j=i-2}^{i+2} \right) \right\rbrace_i - \mathbf{p}^{i,m}(0)\right\| ,
+d^{i,m}_{\text{local}}(t) = \|\mathbf{q}^{i,m}(t) - \mathbf{p}^{i,m}(0)\|,
 $$
 
-where $\mathbf{K}$ is the Kabsch alignment operator.
+where $\mathbf{q}^{i,m}(t)$ are the aligned coordinates of atom $i$ obtained from the window $j$ with coordinates $\mathbf{p}^{j,m}(t)$ as:
+
+$$
+\mathbf{q}^{j,m}(t) = \mathbf{R}^{j,m}(t) \left(\mathbf{p}^{j,m}(t) - \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(t)\right) + \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(0).
+$$
+
+The optimal rotation matrix $\mathbf{R}^{j,m}(t)$ is obtained by singular value decomposition of the cross-covariance matrix:
+
+$$
+\mathbf{H}^{j,m}(t) = \sum_{j} \left(\mathbf{p}^{j,m}(t) - \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(t)\right) \left(\mathbf{p}^{j,m}(0) - \frac{1}{5}\sum_{j} \mathbf{p}^{j,m}(0)\right)^T,
+$$
+
+such that $\mathbf{H}^{j,m}(t) = \mathbf{U}^{j,m}(t) \mathbf{S}^{j,m}(t) (\mathbf{V}^{j,m}(t))^T$ and $\mathbf{R}^{j,m}(t) = \mathbf{U}^{j,m}(t) (\mathbf{V}^{j,m}(t))^T$ with the constraint that $\det(\mathbf{R}^{j,m}(t)) = +1$ to ensure a proper rotation. If $\det(\mathbf{U}^{j,m}(t)(\mathbf{V}^{j,m}(t))^T) = -1$, the sign of the last column of $\mathbf{V}^{j,m}(t)$ is flipped to fulfil the constraint.
 
 __Helical regularity__ for a strand $m$ is calculated as: 
 
@@ -102,38 +114,32 @@ where $\sigma$ is the standard deviation of the metric over $i$.
 
 ### Section II:
 
-__Axial shift__ of strand $m$ with respect to strand $n$ along the central axis is calculated by reorienting to prevent sign ambiguity of direction. We define $\tilde{\mathbf{v}}_1^n(t)$ as:
+__Axial shift__ of strand $m$ with respect to strand $n$ along the central axis is calculated as:
 
 $$
-\tilde{\mathbf{v}}_1^n(t) =
+s^{mn}(t) = \bigl| \langle \tilde{\mathbf{v}}_1^{m}(t) \rangle_m \cdot (\mathbf{c}^m(t) - \mathbf{c}^n(t))\bigr|, \quad \text{where} \quad \tilde{\mathbf{v}}_1^n(t) =
 \begin{cases}
 -\hat{\mathbf{v}}_1^n, & \text{when } \hat{\mathbf{v}}_1^m \cdot \hat{\mathbf{v}}_1^n < 0 \\
 \hat{\mathbf{v}}_1^n,  & \text{otherwise.}
 \end{cases}
 $$
 
-The axial shift is calculated as:
-
-$$
-s^{mn}(t) = \bigl| \langle \tilde{\mathbf{v}}_1^{m}(t) \rangle_m \cdot (\mathbf{c}^m(t) - \mathbf{c}^n(t))\bigr|.
-$$
-
 __Deviations in axis angles__ are calculated between the unit vectors of the principal axes of the two strands $m$ and $n$ as:
 
 $$
-\delta_{\theta}^{mn}(t) = \dfrac{\overbrace{|\arccos(\hat{\mathbf{v}}_1^m(t) \cdot \hat{\mathbf{v}}_1^n(t))}^{\normalsize \theta^{mn}(t)} - \theta^{mn}(0)|}{\theta^{mn}(0)}.
+\delta_{\theta}^{mn}(t) = \dfrac{\overbrace{|\arccos(\hat{\mathbf{v}}_1^m(t) \cdot \hat{\mathbf{v}}_1^n(t))}^{\displaystyle \theta^{mn}(t)} - \theta^{mn}(0)|}{\theta^{mn}(0)}.
 $$
 
 __Deviations in axis distances__ are calculated using the perpendicular distance between the axes of strands $m$ and $n$ as:
 
 $$
-\delta_d^{mn}(t) = \dfrac{ \overbrace{|(\mathbf{c}^m(t) - \mathbf{c}^n(t)) \cdot (\hat{\mathbf{v}}_1^m(t) \times \hat{\mathbf{v}}_1^n(t))|}^{\normalsize d^{mn}(t)} - d^{mn}(0)}{d^{mn}(0)}.
+\delta_d^{mn}(t) = \dfrac{ \overbrace{|(\mathbf{c}^m(t) - \mathbf{c}^n(t)) \cdot (\hat{\mathbf{v}}_1^m(t) \times \hat{\mathbf{v}}_1^n(t))|}^{\displaystyle d^{mn}(t)} - d^{mn}(0)}{d^{mn}(0)}.
 $$
 
 __Deviations in averaged distances__ are calculated using the distance between the average coordinates of strands $m$ and $n$ as:
 
 $$
-\delta_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{\normalsize c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
+\delta_c^{mn}(t) = \dfrac{\overbrace{\| \mathbf{c}^m(t) - \mathbf{c}^n(t)\|}^{\displaystyle c^{mn}(t)} - c^{mn}(0)}{c^{mn}(0)}.
 $$
 
 ### Section III:
@@ -143,13 +149,13 @@ For triple helices, one atom $i$ on each strand is taken to form a triangular cr
 __Deviations in area__ are calculated from the area of the triangle as: 
 
 $$
-\delta^{i}_{\text{Area}}(t) = \dfrac{\overbrace{\dfrac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\|}^{\normalsize \text{Area}^i(t)} - \text{Area}^i(0)}{\text{Area}^i (0)}.
+\delta^{i}_{\text{Area}}(t) = \dfrac{\overbrace{\dfrac{1}{2} \|(\mathbf{p}^{i,2}(t) - \mathbf{p}^{i,1}(t)) \times (\mathbf{p}^{i,3}(t) - \mathbf{p}^{i,1}(t))\|}^{\displaystyle \text{Area}^i(t)} - \text{Area}^i(0)}{\text{Area}^i (0)}.
 $$ 
 
 __Deviations in shape__ are calculated from the normalized isoperimetric ratio (IP) as:
 
 $$
-\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\dfrac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\normalsize \text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
+\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\dfrac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\displaystyle \text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
 $$ 
 where $P^i(t)$ is the corresponding perimeter.
 
@@ -157,6 +163,6 @@ The first frame is taken as the reference. The reference can be changed by appen
 
 # Acknowledgements
 
-The authors thank the National Institute of Health, National Institute of General Medical Sciences, under award number R35-GM150409 and Advanced Research Computing at Virginia Tech for providing computational resources and technical support that have contributed to the results reported within this paper.
+The authors thank the National Institute of Health, National Institute of General Medical Sciences, under award number R35-GM150409 and Advanced Research Computing at Virginia Tech for providing computational resources and technical support.
 
 # References
