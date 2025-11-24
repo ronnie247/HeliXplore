@@ -146,7 +146,7 @@ $$
 __Deviations in shape__ are calculated from the normalized isoperimetric ratio (IP) as:
 
 $$
-\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\frac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)}.
+\delta^{i}_{\text{Shape}}(t) = \dfrac{\overbrace{\frac{4\pi \text{Area}^i(t)}{P^i(t)^2}}^{\text{IP}^i(t)} - \text{IP}^i(0)}{\text{IP}^i(0)},
 $$ 
 where $P^i(t)$ is the corresponding perimeter.
 
