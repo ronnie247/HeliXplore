@@ -13,6 +13,7 @@ authors:
     orcid: 0000-0003-0834-4441
     affiliation: [1, 2]
     email: vwelborn@vt.edu
+    corresponding:true 
 affiliations:
   - index: 1
     name: Department of Chemistry, Virginia Tech, Blacksburg, VA 24061
