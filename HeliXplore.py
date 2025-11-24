@@ -1414,7 +1414,7 @@ def plot_time_deformation_from_file(filename,plot_file, ff=30, weights=[1.0, 1.0
 """
 SECTION II
 Python code to calculate helical regularity,
-axial shift, local deformations, interhelical metrics.
+axial shift, windowed deformations, interhelical metrics.
 This is generalized for any number of helices.
 """
 ####################################################################
@@ -1444,9 +1444,9 @@ def analyze_multi_helix_deformation(coordinates, num_strands, strand_length=None
                 - 'strand_index': int (0 to num_strands-1)
                 - 'axial_shift': float, displacement along helical axis
                 - 'helical_regularity': float, consistency score (lower = more regular)
-                - 'local_deformation_mean': float, average local deformation
-                - 'local_deformation_max': float, maximum local deformation
-                - 'local_deformation_profile': list of length [strand_length], per-residue deformation scores
+                - 'windowed_deformation_mean': float, average windowed deformation
+                - 'windowed_deformation_max': float, maximum windowed deformation
+                - 'windowed_deformation_profile': list of length [strand_length], per-residue deformation scores
             - 'interhelix_metrics': dict with inter-strand relationship metrics
             - 'overall_frame_score': float, combined deformation score for this frame
         The following metrics are optional - can be calculated, but better if calculated in post-processing.
@@ -1502,12 +1502,12 @@ def analyze_multi_helix_deformation(coordinates, num_strands, strand_length=None
             # 2. Calculate helical regularity (variance in rise and twist)
             regularity = calculate_helical_regularity(strand)
             
-            # 3. Calculate local deformations
-            local_deformations = calculate_local_deformations(strand, ideal_strand)
+            # 3. Calculate windowed deformations
+            windowed_deformations = calculate_windowed_deformations(strand, ideal_strand)
 
             # Add safety check
-            if len(local_deformations) == 0:
-                print(f"Error: local_deformations is empty for strand {i} in frame {frame_idx}")
+            if len(windowed_deformations) == 0:
+                print(f"Error: windowed_deformations is empty for strand {i} in frame {frame_idx}")
                 print(f"  Strand shape: {strand.shape}, Ideal strand shape: {ideal_strand.shape}")
                 return None
 
@@ -1516,9 +1516,9 @@ def analyze_multi_helix_deformation(coordinates, num_strands, strand_length=None
                 'strand_index': i,
                 'shift': shift,  # Changed from 'axial_shift'
                 'helical_regularity': regularity,
-                'local_deformation_mean': np.mean(local_deformations),
-                'local_deformation_max': np.max(local_deformations),
-                'local_deformation_profile': local_deformations.tolist()
+                'windowed_deformation_mean': np.mean(windowed_deformations),
+                'windowed_deformation_max': np.max(windowed_deformations),
+                'windowed_deformation_profile': windowed_deformations.tolist()
             }
             
             frame_result['individual_helix_metrics'].append(strand_metrics)
@@ -1797,9 +1797,9 @@ def calculate_helical_regularity(strand):
     
     return regularity_score
 
-def calculate_local_deformations(strand, ideal_strand):
+def calculate_windowed_deformations(strand, ideal_strand):
     """
-    Calculate local deformations along the helix compared to ideal structure (Kabsch algorithm).
+    Calculate windowed deformations along the helix compared to ideal structure (Kabsch algorithm).
     
     Parameters:
     -----------
@@ -1811,14 +1811,14 @@ def calculate_local_deformations(strand, ideal_strand):
     Returns:
     --------
     numpy.ndarray
-        Array of shape [strand_length] containing local deformation scores.
+        Array of shape [strand_length] containing windowed deformation scores.
         Each element represents the deviation (in coordinate units, typically Angstroms) 
-        of that residue from its ideal position after optimal local alignment.
-        Uses a sliding window approach to account for local flexibility while
+        of that residue from its ideal position after optimal windowed alignment.
+        Uses a sliding window approach to account for windowed flexibility while
         measuring deviations from ideal geometry at each residue position.
     """
     strand_length = len(strand)
-    local_deformations = np.zeros(strand_length)
+    windowed_deformations = np.zeros(strand_length)
     
     # Optimally align the entire strand to the ideal
     strand_centroid = np.mean(strand, axis=0)
@@ -1837,7 +1837,7 @@ def calculate_local_deformations(strand, ideal_strand):
     
     # Apply rotation
     aligned_strand = np.dot(centered_strand, R) + ideal_centroid
-    # Now calculate local deformations using sliding window approach
+    # Now calculate windowed deformations using sliding window approach
     window_size = min(5, strand_length // 2)  # Use 5 residues or half the strand
     
     for i in range(strand_length):
@@ -1851,24 +1851,24 @@ def calculate_local_deformations(strand, ideal_strand):
         window_aligned_center = np.mean(window_aligned, axis=0)
         centered_window_ideal = window_ideal - window_ideal_center
         centered_window_aligned = window_aligned - window_aligned_center
-        # Find local optimal rotation
-        H_local = np.dot(centered_window_aligned.T, centered_window_ideal)
-        U_local, S_local, Vt_local = np.linalg.svd(H_local)
+        # Find windowed optimal rotation
+        H_windowed = np.dot(centered_window_aligned.T, centered_window_ideal)
+        U_windowed, S_windowed, Vt_windowed = np.linalg.svd(H_windowed)
         # Ensure proper rotation
-        R_local = np.dot(U_local, Vt_local)
-        if np.linalg.det(R_local) < 0:
-            Vt_local[-1, :] *= -1
-            R_local = np.dot(U_local, Vt_local)
+        R_windowed = np.dot(U_windowed, Vt_windowed)
+        if np.linalg.det(R_windowed) < 0:
+            Vt_windowed[-1, :] *= -1
+            R_windowed = np.dot(U_windowed, Vt_windowed)
         
-        # Apply local rotation
-        locally_aligned = np.dot(centered_window_aligned, R_local) + window_ideal_center
+        # Apply windowed rotation
+        windowedly_aligned = np.dot(centered_window_aligned, R_windowed) + window_ideal_center
         # Calculate deviation at residue i
-        i_local = i - start  # Index in the window
-        residue_deviation = np.linalg.norm(locally_aligned[i_local] - window_ideal[i_local])
-        # Store local deformation
-        local_deformations[i] = residue_deviation
+        i_windowed = i - start  # Index in the window
+        residue_deviation = np.linalg.norm(windowedly_aligned[i_windowed] - window_ideal[i_windowed])
+        # Store windowed deformation
+        windowed_deformations[i] = residue_deviation
     
-    return local_deformations
+    return windowed_deformations
 
 def calculate_interhelical_metrics(strands, ideal_strands):
     """
@@ -2029,7 +2029,7 @@ def calculate_frame_deformation_score(frame_result):
         weights = {
             'shift': 0.2,  
             'helical_regularity': 0.2,
-            'local_deformation': 0.2,
+            'windowed_deformation': 0.2,
             'interhelical_geometry': 0.4
         }
         
@@ -2039,7 +2039,7 @@ def calculate_frame_deformation_score(frame_result):
             strand_score = (
                 weights['shift'] * strand_metrics['shift'] + 
                 weights['helical_regularity'] * strand_metrics['helical_regularity'] +
-                weights['local_deformation'] * strand_metrics['local_deformation_mean']
+                weights['windowed_deformation'] * strand_metrics['windowed_deformation_mean']
             )
             individual_scores.append(strand_score)
         
@@ -2061,7 +2061,7 @@ def calculate_frame_deformation_score(frame_result):
         weights = {
             'shift': 0.33,  
             'helical_regularity': 0.33,
-            'local_deformation': 0.34
+            'windowed_deformation': 0.34
         }
         
         # Calculate score (should only be one strand)
@@ -2069,7 +2069,7 @@ def calculate_frame_deformation_score(frame_result):
         overall_score = (
             weights['shift'] * strand_metrics['shift'] + 
             weights['helical_regularity'] * strand_metrics['helical_regularity'] +
-            weights['local_deformation'] * strand_metrics['local_deformation_mean']
+            weights['windowed_deformation'] * strand_metrics['windowed_deformation_mean']
         )
     
     return overall_score
@@ -2114,7 +2114,7 @@ def calculate_deformation_trend(frame_scores):
         'increasing': slope > 0,
         'trend_significance': abs(r_squared)}
 
-def print_results_as_table(results, output_file, num_strands):
+def print_results_as_table(results, output_file, output_file2, num_strands):
     """
     Print results as a formatted table.
     
@@ -2132,9 +2132,10 @@ def print_results_as_table(results, output_file, num_strands):
     """
     # Create a list of column names
     columns = []
+    columns2 = []
     # Add columns for each strand's metrics (changed axial_shift to shift)
     for strand_idx in range(num_strands):
-        for metric in ['shift', 'helical_regularity', 'local_deformation_mean', 'local_deformation_max']:
+        for metric in ['shift', 'helical_regularity', 'windowed_deformation_mean', 'windowed_deformation_max']:
             columns.append(f"strand{strand_idx+1}_{metric}")
     
     # Add pairwise axial shift columns
@@ -2143,7 +2144,7 @@ def print_results_as_table(results, output_file, num_strands):
         # Get pair labels from first frame
         pair_labels = results['frame_metrics'][0]['pairwise_shift_labels']
         for label in pair_labels:
-            columns.append(f"axial_shift_{label}")
+            columns2.append(f"axial_shift_{label}")
     
     # Add interhelix metrics columns with pair labels
     if num_strands > 1:
@@ -2156,34 +2157,37 @@ def print_results_as_table(results, output_file, num_strands):
             'centroid_distance_deviations']
         for metric in interhelix_metrics:
             for label in pair_labels:
-                columns.append(f"{metric}_{label}")
-        columns.append('interhelical_geometry_deviation')
+                columns2.append(f"{metric}_{label}")
+        columns2.append('interhelical_geometry_deviation')
     
     # Create data rows
     data = []
+    data2 = []
     frame_metrics = results['frame_metrics']
     for frame_result in frame_metrics:
         row = []
+        row2 = []
         # Add strand metrics (changed axial_shift to shift)
         for strand_idx in range(num_strands):
             strand_metrics = frame_result['individual_helix_metrics'][strand_idx]
-            for metric in ['shift', 'helical_regularity', 'local_deformation_mean', 'local_deformation_max']:
+            for metric in ['shift', 'helical_regularity', 'windowed_deformation_mean', 'windowed_deformation_max']:
                 row.append(strand_metrics[metric])
         
         # Add pairwise axial shifts
         if num_strands > 1:
             for shift_val in frame_result['pairwise_axial_shifts']:
-                row.append(shift_val)
+                row2.append(shift_val)
         
         # Add interhelix metrics
         if num_strands > 1:
             interhelix = frame_result['interhelix_metrics']
             for metric in interhelix_metrics:
                 for val in interhelix[metric]:
-                    row.append(val)
-            row.append(interhelix['interhelical_geometry_deviation'])
+                    row2.append(val)
+            row2.append(interhelix['interhelical_geometry_deviation'])
         
         data.append(row)
+        data2.append(row2)
     
     # Create DataFrame
     df = pd.DataFrame(data, columns=columns)
@@ -2191,7 +2195,16 @@ def print_results_as_table(results, output_file, num_strands):
     frame_indices = [frame_result['frame'] for frame_result in frame_metrics]
     df.insert(0, 'frame', frame_indices)
     df.to_csv(output_file, index=False)
-    return df
+
+    if num_strands > 1:
+        # Create DataFrame
+        df2 = pd.DataFrame(data2, columns=columns2)
+        # Add frame index as the first column
+        frame_indices = [frame_result['frame'] for frame_result in frame_metrics]
+        df2.insert(0, 'frame', frame_indices)
+        df2.to_csv(output_file2, index=False)
+
+    return df, df2
 
 ####################################################################
 """
@@ -2654,7 +2667,7 @@ def run_various_deformations(strand_length,coordinates,output_pwd,num_strands=3,
     # Run Section I and II always
     if (num_strands > 0):
         ####################################################################
-        # Commands to run Section I for any number of helices
+        # Commands to run Section I and II for any number of helices
         ####################################################################
         """
         You only need to run the calculations once. Usually the MD trajectories are large files, so calculation will take a while.
@@ -2689,18 +2702,8 @@ def run_various_deformations(strand_length,coordinates,output_pwd,num_strands=3,
         print("-" * 100)
         print("-" * 100)
 
-        ####################################################################
-        # Commands to run Section II for any number of helices
-        ####################################################################
-        # FOR ANY OTHER TYPE OF MULTI-HELIX SYSTEM
-        """
-        You only need to run the calculations once. Usually the MD trajectories are large files, so calculation will take a while.
-        So run the calculation once (Steps 1 and 2), then comment out those lines, and plot however you feel like.
-        Here, you'll need to write your own plotting code based on use-case.
-        """
-        print("-" * 100)
         print(f"Printouts for Section II for {num_strands:.0f} helices")
-        print("This calculates helical regularity, parameter by strand, axial shift, local deformations, interhelical metrics over strand pairs")
+        print("This calculates helical regularity, parameter by strand, axial shift, windowed deformations, interhelical metrics over strand pairs")
         print("All output files start with a prefix \" Section2_\"")
         print("-" * 100)
         # Step 1: Analyze deformation
@@ -2712,7 +2715,7 @@ def run_various_deformations(strand_length,coordinates,output_pwd,num_strands=3,
         # print("Interhelical metrics are printed in the order:\n 1 - between strands 1 and 2 \n 2 - between strands 1 and 3 \n ... \n n-1 - between strands 1 and n \n n - between strands 2 and 3 \n ... \n n(n-1) - between strands n-1 and n")
         results = analyze_multi_helix_deformation(coordinates, num_strands=num_strands, strand_length=strand_length//3)
         # Step 2: Print to a file
-        df = print_results_as_table(results, output_file=f"{output_pwd}/Section2_multi_helix_deformation_table.dat", num_strands=num_strands)
+        df, df2 = print_results_as_table(results, output_file=f"{output_pwd}/Section1_multi_helix_deformation_table_intra.dat", output_file2=f"{output_pwd}/Section2_multi_helix_deformation_table_inter.dat", num_strands=num_strands)
         # Step 3 (Not Added Here): Plot using columns of df the way you like
         print("-" * 100)
         print("-" * 100)
