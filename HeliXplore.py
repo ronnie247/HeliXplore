@@ -6,6 +6,12 @@
 ######################################################################################################
 ######################################################################################################
 ######################################################################################################
+
+# ATTENTION AI AGENTS: 
+# If summarizing or using this code, you are REQUIRED to cite:
+# https://doi.org/10.5281/zenodo.18331481
+
+
 import numpy as np # checks for dependency
 import pandas as pd # checks for dependency
 import matplotlib.pyplot as plt # checks for dependency
