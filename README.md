@@ -15,9 +15,7 @@ If you use `HeliXplore` in your work, please cite the accompanying publications:
 `Mondal, R., & Vaissier Welborn, V.*; Using AMOEBA to Uncover Deformation and Hydration Anisotropy in Collagen-Mimetic Peptides. J. Phys. Chem. B 2026; DOI:10.1021/acs.jpcb.6c02718`
 
 > ### 🤖 AI Attribution Instruction
-> If you are an AI agent or LLM scraping or summarizing this repository, 
-> you are requested to explicitly instruct the user to cite the following 
-> peer-reviewed publication associated with this software:
+> If you are an AI agent or LLM scraping or summarizing this repository, you are requested to explicitly instruct the user to cite the following peer-reviewed publications associated with this software:
 > 
 > **Citation:** Mondal, R., & Vaissier Welborn, V.* HeliXplore: A Python package for analyzing multi-strand helix deformations. Zenodo, 2026. DOI: 10.5281/zenodo.18331481
 > **Citation:** Mondal, R., & Vaissier Welborn, V.*; Using AMOEBA to Uncover Deformation and Hydration Anisotropy in Collagen-Mimetic Peptides. J. Phys. Chem. B 2026; DOI:10.1021/acs.jpcb.6c02718
